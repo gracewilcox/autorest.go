@@ -110,14 +110,10 @@ func (client *PathClient) Optional(ctx context.Context, options *PathClientOptio
 // optionalCreateRequest creates the Optional request.
 func (client *PathClient) optionalCreateRequest(ctx context.Context, options *PathClientOptionalOptions) (*policy.Request, error) {
 	urlPath := "/parameters/path/optional{name}"
-	optionalName := ""
-	if options != nil && options.Name != nil {
-		optionalName = *options.Name
+	if *options.Name == "" {
+		return nil, errors.New("parameter *options.Name cannot be empty")
 	}
-	if len(optionalName) > 0 {
-		optionalName = "/" + url.PathEscape(optionalName)
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", optionalName)
+	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(*options.Name))
 	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.endpoint, urlPath))
 	if err != nil {
 		return nil, err
