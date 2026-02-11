@@ -7,7 +7,6 @@ package armcomputeschedule
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // ScheduledActionsClient contains the methods for the ScheduledActions group.
-// Don't use this type directly, use NewScheduledActionsClient() instead.
+// Don't use this type directly, use [Client.NewScheduledActionsClient] instead.
 type ScheduledActionsClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewScheduledActionsClient creates a new instance of ScheduledActionsClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewScheduledActionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ScheduledActionsClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &ScheduledActionsClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // VirtualMachinesCancelOperations - VirtualMachinesCancelOperations: Cancel a previously submitted (start/deallocate/hibernate)

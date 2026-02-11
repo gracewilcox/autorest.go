@@ -7,7 +7,6 @@ package armmongocluster
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // FirewallRulesClient contains the methods for the FirewallRules group.
-// Don't use this type directly, use NewFirewallRulesClient() instead.
+// Don't use this type directly, use [DocumentDBClient.NewFirewallRulesClient] instead.
 type FirewallRulesClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewFirewallRulesClient creates a new instance of FirewallRulesClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewFirewallRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*FirewallRulesClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &FirewallRulesClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // BeginCreateOrUpdate - Creates a new firewall rule or updates an existing firewall rule on a mongo cluster.

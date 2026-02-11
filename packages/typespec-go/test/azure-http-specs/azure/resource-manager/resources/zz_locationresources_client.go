@@ -7,7 +7,6 @@ package resources
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // LocationResourcesClient contains the methods for the LocationResources group.
-// Don't use this type directly, use NewLocationResourcesClient() instead.
+// Don't use this type directly, use [Client.NewLocationResourcesClient] instead.
 type LocationResourcesClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewLocationResourcesClient creates a new instance of LocationResourcesClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewLocationResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*LocationResourcesClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &LocationResourcesClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // CreateOrUpdate - Create a LocationResource

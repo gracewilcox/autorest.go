@@ -7,7 +7,6 @@ package armapicenter
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // WorkspacesClient contains the methods for the Workspaces group.
-// Don't use this type directly, use NewWorkspacesClient() instead.
+// Don't use this type directly, use [Client.NewWorkspacesClient] instead.
 type WorkspacesClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewWorkspacesClient creates a new instance of WorkspacesClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewWorkspacesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*WorkspacesClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &WorkspacesClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // CreateOrUpdate - Creates new or updates existing workspace.

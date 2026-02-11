@@ -7,7 +7,6 @@ package armmultipleservicegroup
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // VirtualMachinesClient contains the methods for the VirtualMachines group.
-// Don't use this type directly, use NewVirtualMachinesClient() instead.
+// Don't use this type directly, use [CombinedClient.NewVirtualMachinesClient] instead.
 type VirtualMachinesClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewVirtualMachinesClient creates a new instance of VirtualMachinesClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewVirtualMachinesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*VirtualMachinesClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &VirtualMachinesClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // BeginCreateOrUpdate - The operation to create or update a virtual machine. Please note some properties can be set only

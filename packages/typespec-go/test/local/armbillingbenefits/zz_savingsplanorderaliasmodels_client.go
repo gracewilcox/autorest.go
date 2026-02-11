@@ -7,7 +7,6 @@ package armbillingbenefits
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,23 +16,9 @@ import (
 )
 
 // SavingsPlanOrderAliasModelsClient contains the methods for the SavingsPlanOrderAliasModels group.
-// Don't use this type directly, use NewSavingsPlanOrderAliasModelsClient() instead.
+// Don't use this type directly, use [Client.NewSavingsPlanOrderAliasModelsClient] instead.
 type SavingsPlanOrderAliasModelsClient struct {
 	internal *arm.Client
-}
-
-// NewSavingsPlanOrderAliasModelsClient creates a new instance of SavingsPlanOrderAliasModelsClient with the specified values.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewSavingsPlanOrderAliasModelsClient(credential azcore.TokenCredential, options *arm.ClientOptions) (*SavingsPlanOrderAliasModelsClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &SavingsPlanOrderAliasModelsClient{
-		internal: cl,
-	}
-	return client, nil
 }
 
 // BeginCreate - Create a savings plan. Learn more about permissions needed at https://go.microsoft.com/fwlink/?linkid=2215851

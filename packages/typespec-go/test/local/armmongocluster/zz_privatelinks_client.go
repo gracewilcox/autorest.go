@@ -7,7 +7,6 @@ package armmongocluster
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // PrivateLinksClient contains the methods for the PrivateLinks group.
-// Don't use this type directly, use NewPrivateLinksClient() instead.
+// Don't use this type directly, use [DocumentDBClient.NewPrivateLinksClient] instead.
 type PrivateLinksClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewPrivateLinksClient creates a new instance of PrivateLinksClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewPrivateLinksClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*PrivateLinksClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &PrivateLinksClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // NewListByMongoClusterPager - list private links on the given resource

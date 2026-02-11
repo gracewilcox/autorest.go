@@ -7,7 +7,6 @@ package armtest
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // BodyRootsClient contains the methods for the BodyRoots group.
-// Don't use this type directly, use NewBodyRootsClient() instead.
+// Don't use this type directly, use [Client.NewBodyRootsClient] instead.
 type BodyRootsClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewBodyRootsClient creates a new instance of BodyRootsClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewBodyRootsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*BodyRootsClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &BodyRootsClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // Action - Revoke a certificate under a certificate profile.

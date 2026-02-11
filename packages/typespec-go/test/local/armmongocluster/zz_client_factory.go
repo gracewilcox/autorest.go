@@ -12,39 +12,34 @@ import (
 // ClientFactory is a client factory used to create any client in this module.
 // Don't use this type directly, use NewClientFactory instead.
 type ClientFactory struct {
-	subscriptionID string
-	internal       *arm.Client
+	internal *arm.Client
 }
 
 // NewClientFactory creates a new instance of ClientFactory with the specified values.
 // The parameter values will be propagated to any client created from this factory.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - pass nil to accept the default values.
-func NewClientFactory(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ClientFactory, error) {
+func NewClientFactory(options *arm.ClientOptions) (*ClientFactory, error) {
 	internal, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
 	}
 	return &ClientFactory{
-		subscriptionID: subscriptionID,
-		internal:       internal,
+		internal: internal,
 	}, nil
 }
 
 // NewFirewallRulesClient creates a new instance of FirewallRulesClient.
 func (c *ClientFactory) NewFirewallRulesClient() *FirewallRulesClient {
 	return &FirewallRulesClient{
-		subscriptionID: c.subscriptionID,
-		internal:       c.internal,
+		internal: c.internal,
 	}
 }
 
 // NewMongoClustersClient creates a new instance of MongoClustersClient.
 func (c *ClientFactory) NewMongoClustersClient() *MongoClustersClient {
 	return &MongoClustersClient{
-		subscriptionID: c.subscriptionID,
-		internal:       c.internal,
+		internal: c.internal,
 	}
 }
 
@@ -58,23 +53,20 @@ func (c *ClientFactory) NewOperationsClient() *OperationsClient {
 // NewPrivateEndpointConnectionsClient creates a new instance of PrivateEndpointConnectionsClient.
 func (c *ClientFactory) NewPrivateEndpointConnectionsClient() *PrivateEndpointConnectionsClient {
 	return &PrivateEndpointConnectionsClient{
-		subscriptionID: c.subscriptionID,
-		internal:       c.internal,
+		internal: c.internal,
 	}
 }
 
 // NewPrivateLinksClient creates a new instance of PrivateLinksClient.
 func (c *ClientFactory) NewPrivateLinksClient() *PrivateLinksClient {
 	return &PrivateLinksClient{
-		subscriptionID: c.subscriptionID,
-		internal:       c.internal,
+		internal: c.internal,
 	}
 }
 
 // NewReplicasClient creates a new instance of ReplicasClient.
 func (c *ClientFactory) NewReplicasClient() *ReplicasClient {
 	return &ReplicasClient{
-		subscriptionID: c.subscriptionID,
-		internal:       c.internal,
+		internal: c.internal,
 	}
 }

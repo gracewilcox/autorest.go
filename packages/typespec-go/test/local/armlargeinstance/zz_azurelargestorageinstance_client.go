@@ -7,7 +7,6 @@ package armlargeinstance
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // AzureLargeStorageInstanceClient contains the methods for the AzureLargeStorageInstance group.
-// Don't use this type directly, use NewAzureLargeStorageInstanceClient() instead.
+// Don't use this type directly, use [Client.NewAzureLargeStorageInstanceClient] instead.
 type AzureLargeStorageInstanceClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewAzureLargeStorageInstanceClient creates a new instance of AzureLargeStorageInstanceClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewAzureLargeStorageInstanceClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*AzureLargeStorageInstanceClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &AzureLargeStorageInstanceClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // Create - Creates an Azure Large Storage Instance for the specified subscription,

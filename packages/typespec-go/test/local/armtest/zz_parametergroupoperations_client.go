@@ -7,7 +7,6 @@ package armtest
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // ParameterGroupOperationsClient contains the methods for the ParameterGroupOperations group.
-// Don't use this type directly, use NewParameterGroupOperationsClient() instead.
+// Don't use this type directly, use [Client.NewParameterGroupOperationsClient] instead.
 type ParameterGroupOperationsClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewParameterGroupOperationsClient creates a new instance of ParameterGroupOperationsClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewParameterGroupOperationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ParameterGroupOperationsClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &ParameterGroupOperationsClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // NoParameterGroup - This operation should not emit parameter group since all parameters are optional

@@ -7,7 +7,6 @@ package templatesgroup
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // OptionalBodyClient contains the methods for the OptionalBody group.
-// Don't use this type directly, use NewOptionalBodyClient() instead.
+// Don't use this type directly, use [OperationTemplatesClient.NewOptionalBodyClient] instead.
 type OptionalBodyClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewOptionalBodyClient creates a new instance of OptionalBodyClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewOptionalBodyClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*OptionalBodyClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &OptionalBodyClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // Get - Get a Widget

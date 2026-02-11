@@ -7,7 +7,6 @@ package armcontainerorchestratorruntime
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,23 +16,9 @@ import (
 )
 
 // LoadBalancersClient contains the methods for the LoadBalancers group.
-// Don't use this type directly, use NewLoadBalancersClient() instead.
+// Don't use this type directly, use [KubernetesRuntimeClient.NewLoadBalancersClient] instead.
 type LoadBalancersClient struct {
 	internal *arm.Client
-}
-
-// NewLoadBalancersClient creates a new instance of LoadBalancersClient with the specified values.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewLoadBalancersClient(credential azcore.TokenCredential, options *arm.ClientOptions) (*LoadBalancersClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &LoadBalancersClient{
-		internal: cl,
-	}
-	return client, nil
 }
 
 // BeginCreateOrUpdate - Create a LoadBalancer

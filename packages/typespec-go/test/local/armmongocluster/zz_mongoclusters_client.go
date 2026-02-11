@@ -7,7 +7,6 @@ package armmongocluster
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // MongoClustersClient contains the methods for the MongoClusters group.
-// Don't use this type directly, use NewMongoClustersClient() instead.
+// Don't use this type directly, use [DocumentDBClient.NewMongoClustersClient] instead.
 type MongoClustersClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewMongoClustersClient creates a new instance of MongoClustersClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewMongoClustersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*MongoClustersClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &MongoClustersClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // CheckNameAvailability - Check if mongo cluster name is available for use.

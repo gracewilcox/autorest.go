@@ -7,7 +7,6 @@ package armapicenter
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // APIDefinitionsClient contains the methods for the APIDefinitions group.
-// Don't use this type directly, use NewAPIDefinitionsClient() instead.
+// Don't use this type directly, use [Client.NewAPIDefinitionsClient] instead.
 type APIDefinitionsClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewAPIDefinitionsClient creates a new instance of APIDefinitionsClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewAPIDefinitionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*APIDefinitionsClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &APIDefinitionsClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // CreateOrUpdate - Creates new or updates existing API definition.

@@ -12,39 +12,34 @@ import (
 // ClientFactory is a client factory used to create any client in this module.
 // Don't use this type directly, use NewClientFactory instead.
 type ClientFactory struct {
-	subscriptionID string
-	internal       *arm.Client
+	internal *arm.Client
 }
 
 // NewClientFactory creates a new instance of ClientFactory with the specified values.
 // The parameter values will be propagated to any client created from this factory.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - pass nil to accept the default values.
-func NewClientFactory(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ClientFactory, error) {
+func NewClientFactory(options *arm.ClientOptions) (*ClientFactory, error) {
 	internal, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
 	}
 	return &ClientFactory{
-		subscriptionID: subscriptionID,
-		internal:       internal,
+		internal: internal,
 	}, nil
 }
 
 // NewCloudHsmClustersClient creates a new instance of CloudHsmClustersClient.
 func (c *ClientFactory) NewCloudHsmClustersClient() *CloudHsmClustersClient {
 	return &CloudHsmClustersClient{
-		subscriptionID: c.subscriptionID,
-		internal:       c.internal,
+		internal: c.internal,
 	}
 }
 
 // NewDedicatedHsmsClient creates a new instance of DedicatedHsmsClient.
 func (c *ClientFactory) NewDedicatedHsmsClient() *DedicatedHsmsClient {
 	return &DedicatedHsmsClient{
-		subscriptionID: c.subscriptionID,
-		internal:       c.internal,
+		internal: c.internal,
 	}
 }
 
@@ -58,7 +53,6 @@ func (c *ClientFactory) NewOperationsClient() *OperationsClient {
 // NewPrivateEndpointConnectionsClient creates a new instance of PrivateEndpointConnectionsClient.
 func (c *ClientFactory) NewPrivateEndpointConnectionsClient() *PrivateEndpointConnectionsClient {
 	return &PrivateEndpointConnectionsClient{
-		subscriptionID: c.subscriptionID,
-		internal:       c.internal,
+		internal: c.internal,
 	}
 }

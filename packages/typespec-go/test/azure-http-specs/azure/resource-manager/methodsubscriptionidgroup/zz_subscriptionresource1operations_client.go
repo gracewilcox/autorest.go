@@ -7,7 +7,6 @@ package methodsubscriptionidgroup
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,23 +16,9 @@ import (
 )
 
 // SubscriptionResource1OperationsClient contains the methods for the SubscriptionResource1Operations group.
-// Don't use this type directly, use NewSubscriptionResource1OperationsClient() instead.
+// Don't use this type directly, use [TwoSubscriptionResourcesMethodLevelClient.NewSubscriptionResource1OperationsClient] instead.
 type SubscriptionResource1OperationsClient struct {
 	internal *arm.Client
-}
-
-// NewSubscriptionResource1OperationsClient creates a new instance of SubscriptionResource1OperationsClient with the specified values.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewSubscriptionResource1OperationsClient(credential azcore.TokenCredential, options *arm.ClientOptions) (*SubscriptionResource1OperationsClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &SubscriptionResource1OperationsClient{
-		internal: cl,
-	}
-	return client, nil
 }
 
 // Delete - Delete a SubscriptionResource1

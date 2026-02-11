@@ -7,7 +7,6 @@ package templatesgroup
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // LroPagingClient contains the methods for the LroPaging group.
-// Don't use this type directly, use NewLroPagingClient() instead.
+// Don't use this type directly, use [OperationTemplatesClient.NewLroPagingClient] instead.
 type LroPagingClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewLroPagingClient creates a new instance of LroPagingClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewLroPagingClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*LroPagingClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &LroPagingClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // BeginPostPagingLro - A long-running resource action.

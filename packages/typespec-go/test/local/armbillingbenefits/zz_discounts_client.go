@@ -7,7 +7,6 @@ package armbillingbenefits
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // DiscountsClient contains the methods for the Discounts group.
-// Don't use this type directly, use NewDiscountsClient() instead.
+// Don't use this type directly, use [Client.NewDiscountsClient] instead.
 type DiscountsClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewDiscountsClient creates a new instance of DiscountsClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewDiscountsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*DiscountsClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &DiscountsClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // BeginCancel - Cancel discount. Stops applying the benefit.

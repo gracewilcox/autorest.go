@@ -7,7 +7,6 @@ package armhardwaresecuritymodules
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -18,26 +17,10 @@ import (
 )
 
 // DedicatedHsmsClient contains the methods for the DedicatedHsms group.
-// Don't use this type directly, use NewDedicatedHsmsClient() instead.
+// Don't use this type directly, use [Client.NewDedicatedHsmsClient] instead.
 type DedicatedHsmsClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewDedicatedHsmsClient creates a new instance of DedicatedHsmsClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewDedicatedHsmsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*DedicatedHsmsClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &DedicatedHsmsClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // BeginCreateOrUpdate - Create or Update a dedicated HSM in the specified subscription.

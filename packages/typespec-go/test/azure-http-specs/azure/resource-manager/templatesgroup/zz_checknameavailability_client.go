@@ -7,7 +7,6 @@ package templatesgroup
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // CheckNameAvailabilityClient contains the methods for the CheckNameAvailability group.
-// Don't use this type directly, use NewCheckNameAvailabilityClient() instead.
+// Don't use this type directly, use [OperationTemplatesClient.NewCheckNameAvailabilityClient] instead.
 type CheckNameAvailabilityClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewCheckNameAvailabilityClient creates a new instance of CheckNameAvailabilityClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewCheckNameAvailabilityClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*CheckNameAvailabilityClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &CheckNameAvailabilityClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // CheckGlobal - Implements global CheckNameAvailability operations

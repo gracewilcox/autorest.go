@@ -7,7 +7,6 @@ package armtest
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // LROClient contains the methods for the LRO group.
-// Don't use this type directly, use NewLROClient() instead.
+// Don't use this type directly, use [Client.NewLROClient] instead.
 type LROClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewLROClient creates a new instance of LROClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewLROClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*LROClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &LROClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // BeginOkResponseWithAsyncHeader - A sample LRO with Azure-AsyncOperation header in 200 response

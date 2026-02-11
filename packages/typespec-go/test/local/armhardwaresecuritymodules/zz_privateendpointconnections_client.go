@@ -7,7 +7,6 @@ package armhardwaresecuritymodules
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // PrivateEndpointConnectionsClient contains the methods for the PrivateEndpointConnections group.
-// Don't use this type directly, use NewPrivateEndpointConnectionsClient() instead.
+// Don't use this type directly, use [Client.NewPrivateEndpointConnectionsClient] instead.
 type PrivateEndpointConnectionsClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewPrivateEndpointConnectionsClient creates a new instance of PrivateEndpointConnectionsClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewPrivateEndpointConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*PrivateEndpointConnectionsClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &PrivateEndpointConnectionsClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // Create - Creates or updates the private endpoint connection for the Cloud Hsm Cluster.

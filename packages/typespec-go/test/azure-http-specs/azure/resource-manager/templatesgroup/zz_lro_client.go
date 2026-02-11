@@ -7,7 +7,6 @@ package templatesgroup
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // LroClient contains the methods for the Lro group.
-// Don't use this type directly, use NewLroClient() instead.
+// Don't use this type directly, use [OperationTemplatesClient.NewLroClient] instead.
 type LroClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewLroClient creates a new instance of LroClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewLroClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*LroClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &LroClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // BeginCreateOrReplace - Create a Order
@@ -259,6 +242,72 @@ func (client *LroClient) exportCreateRequest(ctx context.Context, resourceGroupN
 		return nil, errors.New("parameter orderName cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{orderName}", url.PathEscape(orderName))
+	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	if err != nil {
+		return nil, err
+	}
+	reqQP := req.Raw().URL.Query()
+	reqQP.Set("api-version", "2023-12-01-preview")
+	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().Header["Accept"] = []string{"application/json"}
+	req.Raw().Header["Content-Type"] = []string{"application/json"}
+	if err := runtime.MarshalAsJSON(req, body); err != nil {
+		return nil, err
+	}
+	return req, nil
+}
+
+// - body - The request body
+// - options - LroClientBeginExportArrayOptions contains the optional parameters for the LroClient.BeginExportArray method.
+func (client *LroClient) BeginExportArray(ctx context.Context, body ExportRequest, options *LroClientBeginExportArrayOptions) (*runtime.Poller[LroClientExportArrayResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.exportArray(ctx, body, options)
+		if err != nil {
+			return nil, err
+		}
+		poller, err := runtime.NewPoller(resp, client.internal.Pipeline(), &runtime.NewPollerOptions[LroClientExportArrayResponse]{
+			Tracer: client.internal.Tracer(),
+		})
+		return poller, err
+	} else {
+		return runtime.NewPollerFromResumeToken(options.ResumeToken, client.internal.Pipeline(), &runtime.NewPollerFromResumeTokenOptions[LroClientExportArrayResponse]{
+			Tracer: client.internal.Tracer(),
+		})
+	}
+}
+
+// ExportArray -
+// If the operation fails it returns an *azcore.ResponseError type.
+//
+// Generated from API version 2023-12-01-preview
+func (client *LroClient) exportArray(ctx context.Context, body ExportRequest, options *LroClientBeginExportArrayOptions) (*http.Response, error) {
+	var err error
+	const operationName = "LroClient.BeginExportArray"
+	ctx = context.WithValue(ctx, runtime.CtxAPINameKey{}, operationName)
+	ctx, endSpan := runtime.StartSpan(ctx, operationName, client.internal.Tracer(), nil)
+	defer func() { endSpan(err) }()
+	req, err := client.exportArrayCreateRequest(ctx, body, options)
+	if err != nil {
+		return nil, err
+	}
+	httpResp, err := client.internal.Pipeline().Do(req)
+	if err != nil {
+		return nil, err
+	}
+	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
+		err = runtime.NewResponseError(httpResp)
+		return nil, err
+	}
+	return httpResp, nil
+}
+
+// exportArrayCreateRequest creates the ExportArray request.
+func (client *LroClient) exportArrayCreateRequest(ctx context.Context, body ExportRequest, _ *LroClientBeginExportArrayOptions) (*policy.Request, error) {
+	urlPath := "/subscriptions/{subscriptionId}/providers/Azure.ResourceManager.OperationTemplates/exportArray"
+	if client.subscriptionID == "" {
+		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+	}
+	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err

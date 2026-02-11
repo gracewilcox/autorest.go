@@ -6,7 +6,6 @@ package armhealthbot
 
 import (
 	"context"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,23 +16,9 @@ import (
 // all supported RP operations. You should have exactly one declaration for each
 // Azure Resource Manager service. It implements
 // GET "/providers/Microsoft.ContosoProviderHub/operations"
-// Don't use this type directly, use NewOperationsClient() instead.
+// Don't use this type directly, use [Client.NewOperationsClient] instead.
 type OperationsClient struct {
 	internal *arm.Client
-}
-
-// NewOperationsClient creates a new instance of OperationsClient with the specified values.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewOperationsClient(credential azcore.TokenCredential, options *arm.ClientOptions) (*OperationsClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &OperationsClient{
-		internal: cl,
-	}
-	return client, nil
 }
 
 // NewListPager - Lists all the available Azure Health Bot operations.

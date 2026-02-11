@@ -7,7 +7,6 @@ package armdevopsinfrastructure
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // SubscriptionUsagesClient contains the methods for the SubscriptionUsages group.
-// Don't use this type directly, use NewSubscriptionUsagesClient() instead.
+// Don't use this type directly, use [Client.NewSubscriptionUsagesClient] instead.
 type SubscriptionUsagesClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewSubscriptionUsagesClient creates a new instance of SubscriptionUsagesClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewSubscriptionUsagesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*SubscriptionUsagesClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &SubscriptionUsagesClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // NewUsagesPager - List Quota resources by subscription ID

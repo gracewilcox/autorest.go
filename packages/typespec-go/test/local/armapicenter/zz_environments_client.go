@@ -7,7 +7,6 @@ package armapicenter
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // EnvironmentsClient contains the methods for the Environments group.
-// Don't use this type directly, use NewEnvironmentsClient() instead.
+// Don't use this type directly, use [Client.NewEnvironmentsClient] instead.
 type EnvironmentsClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewEnvironmentsClient creates a new instance of EnvironmentsClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewEnvironmentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*EnvironmentsClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &EnvironmentsClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // CreateOrUpdate - Creates new or updates existing environment.

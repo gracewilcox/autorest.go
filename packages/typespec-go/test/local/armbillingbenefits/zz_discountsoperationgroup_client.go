@@ -7,7 +7,6 @@ package armbillingbenefits
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,23 +16,9 @@ import (
 )
 
 // DiscountsOperationGroupClient contains the methods for the DiscountsOperationGroup group.
-// Don't use this type directly, use NewDiscountsOperationGroupClient() instead.
+// Don't use this type directly, use [Client.NewDiscountsOperationGroupClient] instead.
 type DiscountsOperationGroupClient struct {
 	internal *arm.Client
-}
-
-// NewDiscountsOperationGroupClient creates a new instance of DiscountsOperationGroupClient with the specified values.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewDiscountsOperationGroupClient(credential azcore.TokenCredential, options *arm.ClientOptions) (*DiscountsOperationGroupClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &DiscountsOperationGroupClient{
-		internal: cl,
-	}
-	return client, nil
 }
 
 // NewScopeListPager - List discounts that are applicable for a given scope. Currently supported scopes: billing accounts

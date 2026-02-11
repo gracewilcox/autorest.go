@@ -7,7 +7,6 @@ package armbillingbenefits
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,23 +16,9 @@ import (
 )
 
 // SavingsPlanModelsClient contains the methods for the SavingsPlanModels group.
-// Don't use this type directly, use NewSavingsPlanModelsClient() instead.
+// Don't use this type directly, use [Client.NewSavingsPlanModelsClient] instead.
 type SavingsPlanModelsClient struct {
 	internal *arm.Client
-}
-
-// NewSavingsPlanModelsClient creates a new instance of SavingsPlanModelsClient with the specified values.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewSavingsPlanModelsClient(credential azcore.TokenCredential, options *arm.ClientOptions) (*SavingsPlanModelsClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &SavingsPlanModelsClient{
-		internal: cl,
-	}
-	return client, nil
 }
 
 // Get - Get savings plan.

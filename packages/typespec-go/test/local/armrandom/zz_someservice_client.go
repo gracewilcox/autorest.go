@@ -6,7 +6,6 @@ package armrandom
 
 import (
 	"context"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -14,23 +13,9 @@ import (
 )
 
 // SomeServiceClient contains the methods for the SomeService group.
-// Don't use this type directly, use NewSomeServiceClient() instead.
+// Don't use this type directly, use [Client.NewSomeServiceClient] instead.
 type SomeServiceClient struct {
 	internal *arm.Client
-}
-
-// NewSomeServiceClient creates a new instance of SomeServiceClient with the specified values.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewSomeServiceClient(credential azcore.TokenCredential, options *arm.ClientOptions) (*SomeServiceClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &SomeServiceClient{
-		internal: cl,
-	}
-	return client, nil
 }
 
 // CheckTrialAvailability - Return trial status for subscription by region

@@ -7,7 +7,6 @@ package armcontainerorchestratorruntime
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,23 +16,9 @@ import (
 )
 
 // StorageClassClient contains the methods for the StorageClass group.
-// Don't use this type directly, use NewStorageClassClient() instead.
+// Don't use this type directly, use [KubernetesRuntimeClient.NewStorageClassClient] instead.
 type StorageClassClient struct {
 	internal *arm.Client
-}
-
-// NewStorageClassClient creates a new instance of StorageClassClient with the specified values.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewStorageClassClient(credential azcore.TokenCredential, options *arm.ClientOptions) (*StorageClassClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &StorageClassClient{
-		internal: cl,
-	}
-	return client, nil
 }
 
 // BeginCreateOrUpdate - Create a StorageClassResource

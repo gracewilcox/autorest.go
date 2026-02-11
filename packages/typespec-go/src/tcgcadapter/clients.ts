@@ -42,7 +42,7 @@ export class ClientAdapter {
     }
     for (const sdkClient of this.ta.ctx.sdkPackage.clients) {
       // start with instantiable clients and recursively work down
-      if (sdkClient.clientInitialization.initializedBy & tcgc.InitializedByFlags.Individually) {
+      if (isInstantiableClient(sdkClient.clientInitialization.initializedBy)) {
         this.recursiveAdaptClient(sdkClient);
       }
     }
@@ -174,7 +174,7 @@ export class ClientAdapter {
     }
 
     // anything other than public means non-instantiable client
-    if (sdkClient.clientInitialization.initializedBy & tcgc.InitializedByFlags.Individually) {
+    if (isInstantiableClient(sdkClient.clientInitialization.initializedBy)) {
       let constructable: go.Constructable | undefined;
       // we skip generating client constructors when emitting into
       // an existing module. this is because the constructor(s) require
@@ -1508,6 +1508,17 @@ interface HttpStatusCodeRange {
 
 function isHttpStatusCodeRange(statusCode: HttpStatusCodeRange | number): statusCode is HttpStatusCodeRange {
   return (<HttpStatusCodeRange>statusCode).start !== undefined;
+}
+
+/**
+ * returns true if bit tcgc.InitializedByFlags.Individually is set
+ * 
+ * @param initializedBy the value to test
+ * @returns true for instantiable clients
+ */
+function isInstantiableClient(initializedBy: tcgc.InitializedByFlags): boolean {
+  // NOTE: tcgc.InitializedByFlags.Default has value -1 (i.e. all bits set)
+  return initializedBy !== tcgc.InitializedByFlags.Default && (initializedBy & tcgc.InitializedByFlags.Individually) !== 0;
 }
 
 /** contains the common set of param info needed to adapt the parameter's style */

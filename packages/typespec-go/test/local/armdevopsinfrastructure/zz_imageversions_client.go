@@ -7,7 +7,6 @@ package armdevopsinfrastructure
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // ImageVersionsClient contains the methods for the ImageVersions group.
-// Don't use this type directly, use NewImageVersionsClient() instead.
+// Don't use this type directly, use [Client.NewImageVersionsClient] instead.
 type ImageVersionsClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewImageVersionsClient creates a new instance of ImageVersionsClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewImageVersionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ImageVersionsClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &ImageVersionsClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // NewListByImagePager - List ImageVersion resources by Image

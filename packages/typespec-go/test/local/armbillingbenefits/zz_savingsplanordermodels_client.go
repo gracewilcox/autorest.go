@@ -7,7 +7,6 @@ package armbillingbenefits
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,23 +16,9 @@ import (
 )
 
 // SavingsPlanOrderModelsClient contains the methods for the SavingsPlanOrderModels group.
-// Don't use this type directly, use NewSavingsPlanOrderModelsClient() instead.
+// Don't use this type directly, use [Client.NewSavingsPlanOrderModelsClient] instead.
 type SavingsPlanOrderModelsClient struct {
 	internal *arm.Client
-}
-
-// NewSavingsPlanOrderModelsClient creates a new instance of SavingsPlanOrderModelsClient with the specified values.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewSavingsPlanOrderModelsClient(credential azcore.TokenCredential, options *arm.ClientOptions) (*SavingsPlanOrderModelsClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &SavingsPlanOrderModelsClient{
-		internal: cl,
-	}
-	return client, nil
 }
 
 // Elevate - Elevate as owner on savings plan order based on billing permissions.

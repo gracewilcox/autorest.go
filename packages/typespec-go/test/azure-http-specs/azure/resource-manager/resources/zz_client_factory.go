@@ -19,7 +19,7 @@ type ClientFactory struct {
 // The parameter values will be propagated to any client created from this factory.
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - pass nil to accept the default values.
-func NewClientFactory(credential azcore.TokenCredential, options *arm.ClientOptions) (*ClientFactory, error) {
+func NewClientFactory(options *arm.ClientOptions) (*ClientFactory, error) {
 	internal, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -37,33 +37,29 @@ func (c *ClientFactory) NewExtensionsResourcesClient() *ExtensionsResourcesClien
 }
 
 // NewLocationResourcesClient creates a new instance of LocationResourcesClient.
-func (c *ClientFactory) NewLocationResourcesClient(subscriptionID string) *LocationResourcesClient {
+func (c *ClientFactory) NewLocationResourcesClient() *LocationResourcesClient {
 	return &LocationResourcesClient{
-		subscriptionID: subscriptionID,
-		internal:       c.internal,
+		internal: c.internal,
 	}
 }
 
 // NewNestedClient creates a new instance of NestedClient.
-func (c *ClientFactory) NewNestedClient(subscriptionID string) *NestedClient {
+func (c *ClientFactory) NewNestedClient() *NestedClient {
 	return &NestedClient{
-		subscriptionID: subscriptionID,
-		internal:       c.internal,
+		internal: c.internal,
 	}
 }
 
 // NewSingletonClient creates a new instance of SingletonClient.
-func (c *ClientFactory) NewSingletonClient(subscriptionID string) *SingletonClient {
+func (c *ClientFactory) NewSingletonClient() *SingletonClient {
 	return &SingletonClient{
-		subscriptionID: subscriptionID,
-		internal:       c.internal,
+		internal: c.internal,
 	}
 }
 
 // NewTopLevelClient creates a new instance of TopLevelClient.
-func (c *ClientFactory) NewTopLevelClient(subscriptionID string) *TopLevelClient {
+func (c *ClientFactory) NewTopLevelClient() *TopLevelClient {
 	return &TopLevelClient{
-		subscriptionID: subscriptionID,
-		internal:       c.internal,
+		internal: c.internal,
 	}
 }

@@ -12,31 +12,27 @@ import (
 // ClientFactory is a client factory used to create any client in this module.
 // Don't use this type directly, use NewClientFactory instead.
 type ClientFactory struct {
-	subscriptionID string
-	internal       *arm.Client
+	internal *arm.Client
 }
 
 // NewClientFactory creates a new instance of ClientFactory with the specified values.
 // The parameter values will be propagated to any client created from this factory.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - pass nil to accept the default values.
-func NewClientFactory(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ClientFactory, error) {
+func NewClientFactory(options *arm.ClientOptions) (*ClientFactory, error) {
 	internal, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
 	}
 	return &ClientFactory{
-		subscriptionID: subscriptionID,
-		internal:       internal,
+		internal: internal,
 	}, nil
 }
 
 // NewImageVersionsClient creates a new instance of ImageVersionsClient.
 func (c *ClientFactory) NewImageVersionsClient() *ImageVersionsClient {
 	return &ImageVersionsClient{
-		subscriptionID: c.subscriptionID,
-		internal:       c.internal,
+		internal: c.internal,
 	}
 }
 
@@ -50,31 +46,27 @@ func (c *ClientFactory) NewOperationsClient() *OperationsClient {
 // NewPoolsClient creates a new instance of PoolsClient.
 func (c *ClientFactory) NewPoolsClient() *PoolsClient {
 	return &PoolsClient{
-		subscriptionID: c.subscriptionID,
-		internal:       c.internal,
+		internal: c.internal,
 	}
 }
 
 // NewResourceDetailsClient creates a new instance of ResourceDetailsClient.
 func (c *ClientFactory) NewResourceDetailsClient() *ResourceDetailsClient {
 	return &ResourceDetailsClient{
-		subscriptionID: c.subscriptionID,
-		internal:       c.internal,
+		internal: c.internal,
 	}
 }
 
 // NewSKUClient creates a new instance of SKUClient.
 func (c *ClientFactory) NewSKUClient() *SKUClient {
 	return &SKUClient{
-		subscriptionID: c.subscriptionID,
-		internal:       c.internal,
+		internal: c.internal,
 	}
 }
 
 // NewSubscriptionUsagesClient creates a new instance of SubscriptionUsagesClient.
 func (c *ClientFactory) NewSubscriptionUsagesClient() *SubscriptionUsagesClient {
 	return &SubscriptionUsagesClient{
-		subscriptionID: c.subscriptionID,
-		internal:       c.internal,
+		internal: c.internal,
 	}
 }

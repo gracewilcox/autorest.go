@@ -7,7 +7,6 @@ package armcodesigning
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // AccountsClient contains the methods for the Accounts group.
-// Don't use this type directly, use NewAccountsClient() instead.
+// Don't use this type directly, use [Client.NewAccountsClient] instead.
 type AccountsClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewAccountsClient creates a new instance of AccountsClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewAccountsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*AccountsClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &AccountsClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // CheckNameAvailability - Checks that the trusted signing account name is valid and is not already in use.

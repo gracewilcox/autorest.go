@@ -7,7 +7,6 @@ package commonpropsgroup
 import (
 	"context"
 	"errors"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
@@ -17,26 +16,10 @@ import (
 )
 
 // ErrorClient contains the methods for the Error group.
-// Don't use this type directly, use NewErrorClient() instead.
+// Don't use this type directly, use [CommonPropertiesClient.NewErrorClient] instead.
 type ErrorClient struct {
 	internal       *arm.Client
 	subscriptionID string
-}
-
-// NewErrorClient creates a new instance of ErrorClient with the specified values.
-//   - subscriptionID - The ID of the target subscription. The value must be an UUID.
-//   - credential - used to authorize requests. Usually a credential from azidentity.
-//   - options - Contains optional client configuration. Pass nil to accept the default values.
-func NewErrorClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ErrorClient, error) {
-	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
-	if err != nil {
-		return nil, err
-	}
-	client := &ErrorClient{
-		subscriptionID: subscriptionID,
-		internal:       cl,
-	}
-	return client, nil
 }
 
 // CreateForUserDefinedError - Create a ConfidentialResource
