@@ -23,12 +23,31 @@ scalar base64Bytes extends bytes;
 @mediaTypeHint("application/xml")
 model Error {
   /** The error code. */
-  #suppress "@azure-tools/typespec-azure-core/casing-style" "Existing API"
-  Code?: StorageErrorCode;
+  @header("x-ms-error-code")
+  errorCode?: string;
+
+  /** The error code for the copy source. */
+  @header("x-ms-copy-source-error-code")
+  xMsCopySourceErrorCode?: string;
+
+  /** The status code for the copy source. */
+  @header("x-ms-copy-source-status-code")
+  xMsCopySourceStatusCode?: int32;
+
+  /** The error code. */
+  @Xml.name("Code") code?: StorageErrorCode;
 
   /** The error message. */
-  #suppress "@azure-tools/typespec-azure-core/casing-style" "Existing API"
-  Message?: string;
+  @Xml.name("Message") message?: string;
+
+  /** Copy source status code */
+  @Xml.name("CopySourceStatusCode") copySourceStatusCode?: int32;
+
+  /** Copy source error code */
+  @Xml.name("CopySourceErrorCode") copySourceErrorCode?: string;
+
+  /** Copy source error message */
+  @Xml.name("CopySourceErrorMessage") copySourceErrorMessage?: string;
 }
 
 /** Error codes returned by the Azure Blob Storage service. */
@@ -57,6 +76,10 @@ union StorageErrorCode {
 
   /** Empty metadata key. */
   EmptyMetadataKey: "EmptyMetadataKey",
+
+  /** Incremental copy of an earlier snapshot is not allowed. */
+  @added(Versions.v2026_04_06)
+  IncrementalCopyOfEarlierSnapshotNotAllowed: "IncrementalCopyOfEarlierSnapshotNotAllowed",
 
   /** Insufficient account permissions. */
   InsufficientAccountPermissions: "InsufficientAccountPermissions",
@@ -91,6 +114,9 @@ union StorageErrorCode {
   /** Invalid request URL. */
   InvalidRequestUrl: "InvalidRequestUrl",
 
+  /** Invalid resource name. */
+  InvalidResourceName: "InvalidResourceName",
+
   /** Invalid URI. */
   InvalidUri: "InvalidUri",
 
@@ -120,6 +146,9 @@ union StorageErrorCode {
 
   /** Multiple condition headers not supported. */
   MultipleConditionHeadersNotSupported: "MultipleConditionHeadersNotSupported",
+
+  /** No authentication information. */
+  NoAuthenticationInformation: "NoAuthenticationInformation",
 
   /** Operation timed out. */
   OperationTimedOut: "OperationTimedOut",
@@ -435,7 +464,7 @@ model SignedIdentifier {
   @Xml.name("Id") id: string;
 
   /** The access policy for the signed identifier. */
-  @Xml.name("AccessPolicy") accessPolicy: AccessPolicy;
+  @Xml.name("AccessPolicy") accessPolicy?: AccessPolicy;
 }
 
 /** The result of a Filter Blobs API call */
@@ -585,7 +614,7 @@ model ContainerItem {
   @Xml.name("Name") name: string;
 
   /** Whether the container is deleted. */
-  @Xml.name("Deleted") delete?: boolean;
+  @Xml.name("Deleted") deleted?: boolean;
 
   /** The version of the container. */
   @Xml.name("Version") version?: string;
@@ -801,15 +830,15 @@ model AccessPolicy {
   /** The date-time the policy is active. */
   @Xml.name("Start")
   @encode("rfc3339-fixed-width")
-  start: utcDateTime;
+  start?: utcDateTime;
 
   /** The date-time the policy expires. */
   @Xml.name("Expiry")
   @encode("rfc3339-fixed-width")
-  expiry: utcDateTime;
+  expiry?: utcDateTime;
 
   /** The permissions for acl the policy. */
-  @Xml.name("Permission") permission: string;
+  @Xml.name("Permission") permission?: string;
 }
 
 /** The access tiers. */
@@ -1373,7 +1402,7 @@ model QueryFormat {
 
   /** The Parquet configuration. */
   #suppress "@azure-tools/typespec-azure-core/bad-record-type" "Existing API"
-  @Xml.name("ParquetConfiguration")
+  @Xml.name("ParquetTextConfiguration")
   parquetTextConfiguration?: ParquetConfiguration;
 }
 
@@ -1516,11 +1545,19 @@ alias DenyEncryptionScopeOverride = {
 };
 
 /** Specifies whether data in the container may be accessed publicly and the level of access */
-alias BlobPublicAccess = {
+alias BlobPublicAccessParameter = {
   /** The public access setting for the container. */
   @header("x-ms-blob-public-access")
   access?: PublicAccessType;
 };
+
+/** Specifies whether data in the container may be accessed publicly and the level of access */
+alias BlobPublicAccessResponseHeader = {
+  /** The public access setting for the container. */
+  @header("x-ms-blob-public-access")
+  blobPublicAccess?: PublicAccessType;
+};
+
 
 /** Optional: Indicates the priority with which to rehydrate an archived blob. */
 alias RehydratePriorityHeader = {
@@ -1529,8 +1566,18 @@ alias RehydratePriorityHeader = {
   rehydratePriority?: RehydratePriority;
 };
 
+/** The expires parameter. */
+alias ExpiryTimeParameter = {
+  /** The time this blob will expire. */
+  #suppress "@azure-tools/typespec-azure-core/known-encoding" "Existing API"
+  @clientName("ExpiresOn")
+  @encode("rfc7231")
+  @header("x-ms-expiry-time")
+  expiryTime?: utcDateTime;
+};
+
 /** The expires on response header. */
-alias ExpiryTimeHeader = {
+alias ExpiryTimeResponseHeader = {
   /** The time this blob will expire. */
   #suppress "@azure-tools/typespec-azure-core/known-encoding" "Existing API"
   @clientName("ExpiresOn")
@@ -2563,7 +2610,7 @@ alias LeaseDurationHeaderParameter = {
 // NOTE: This does not explicitly let emitters know that this is a collection header for metadata. Logic should be handwritten to handle this.
 alias MetadataHeaders = {
   /** The metadata headers. */
-  @alternateType(Record<string>, "rust,javascript,python,go")
+  @alternateType(Record<string>, "rust,javascript,python,csharp,go")
   @header("x-ms-meta")
   metadata?: string;
 };

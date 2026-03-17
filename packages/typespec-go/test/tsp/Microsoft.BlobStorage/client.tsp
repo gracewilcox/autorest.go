@@ -102,23 +102,35 @@ interface PageBlobClient extends Storage.Blob.PageBlob {}
 @@alternateType(BlobItem.name, string, "rust");
 @@alternateType(BlobPrefix.name, string, "rust");
 
-// @@clientOption(BlobItem.name,
-//   "deserialize_with",
-//   "crate::models::deserialize_blob_name",
-//   "rust"
-// );
-// @@clientOption(BlobPrefix.name,
-//   "deserialize_with",
-//   "crate::models::deserialize_blob_name",
-//   "rust"
-// );
+@@clientOption(BlobItem.name,
+  "deserialize_with",
+  "crate::models::blob_name::option::deserialize",
+  "rust"
+);
+@@clientOption(BlobPrefix.name,
+  "deserialize_with",
+  "crate::models::blob_name::option::deserialize",
+  "rust"
+);
 
-@@clientNamespace(Storage.Blob, "Azure.Storage.Blobs");
-@@clientNamespace(Storage.Blob.Container, "Azure.Storage.Blobs");
-@@clientNamespace(Storage.Blob.Blob, "Azure.Storage.Blobs");
-@@clientNamespace(Storage.Blob.AppendBlob, "Azure.Storage.Blobs");
-@@clientNamespace(Storage.Blob.BlockBlob, "Azure.Storage.Blobs");
-@@clientNamespace(Storage.Blob.PageBlob, "Azure.Storage.Blobs");
+@@clientNamespace(Storage.Blob, "Azure.Storage.Blobs", "!csharp, !python");
+@@clientNamespace(Storage.Blob.Container,
+  "Azure.Storage.Blobs",
+  "!csharp, !python"
+);
+@@clientNamespace(Storage.Blob.Blob, "Azure.Storage.Blobs", "!csharp, !python");
+@@clientNamespace(Storage.Blob.AppendBlob,
+  "Azure.Storage.Blobs",
+  "!csharp, !python"
+);
+@@clientNamespace(Storage.Blob.BlockBlob,
+  "Azure.Storage.Blobs",
+  "!csharp, !python"
+);
+@@clientNamespace(Storage.Blob.PageBlob,
+  "Azure.Storage.Blobs",
+  "!csharp, !python"
+);
 
 @@clientName(Storage.Blob.BlockBlob.upload, "upload_internal", "rust");
 @@clientName(Storage.Blob.Blob.download, "download_internal", "rust");
@@ -142,13 +154,14 @@ interface PageBlobClient extends Storage.Blob.PageBlob {}
 );
 @@clientName(ImmutabilityPolicyExpiryRequiredParameter.immutabilityPolicyExpiry,
   "expiry",
-  "!python"
+  "!python, !csharp, !javascript"
 );
 
 @@alternateType(AccessPolicy.start, string, "javascript");
 @@alternateType(AccessPolicy.expiry, string, "javascript");
 @@alternateType(UserDelegationKey.signedStart, string, "javascript");
 @@alternateType(UserDelegationKey.signedExpiry, string, "javascript");
+@@alternateType(MultipartBodyParameter.body, string, "javascript");
 
 @@clientName(AccessPolicy.start, "startsOn", "javascript");
 @@clientName(AccessPolicy.expiry, "expiresOn", "javascript");
@@ -158,6 +171,10 @@ interface PageBlobClient extends Storage.Blob.PageBlob {}
   "javascript"
 );
 @@clientName(BlobProperties.creationTime, "createdOn", "javascript");
+@@clientName(CreationTimeResponseHeader.creationTime,
+  "createdOn",
+  "javascript"
+);
 @@clientName(BlobProperties.copyCompletionTime,
   "copyCompletedOn",
   "javascript"
@@ -167,6 +184,7 @@ interface PageBlobClient extends Storage.Blob.PageBlob {}
 @@clientName(ContainerProperties.deletedTime, "deletedOn", "javascript");
 @@clientName(ContainerProperties.eTag, "etag", "javascript");
 @@clientName(EtagResponseHeader.eTag, "etag", "javascript");
+@@clientName(EtagResponseHeaderPrivate.eTag, "etag", "javascript");
 @@clientName(GeoReplication.lastSyncTime, "lastSyncOn", "javascript");
 @@clientName(KeyInfo.start, "startsOn", "javascript");
 @@clientName(KeyInfo.expiry, "expiresOn", "javascript");
@@ -185,6 +203,7 @@ interface PageBlobClient extends Storage.Blob.PageBlob {}
   "continuationToken",
   "javascript"
 );
+@@clientName(MaxResultsParameter.maxresults, "maxPageSize", "javascript");
 @@clientName(ListContainersSegmentResponse.maxResults,
   "maxPageSize",
   "javascript"
@@ -200,11 +219,24 @@ interface PageBlobClient extends Storage.Blob.PageBlob {}
   "maxPageSize",
   "javascript"
 );
-@@clientName(BlobPublicAccess.access, "blobPublicAccess", "javascript");
 @@clientName(LeaseDurationResponseHeader.duration,
   "leaseDuration",
   "javascript"
 );
+@@clientName(BlobContentMd5Parameter.blobContentMd5,
+  "blobContentMD5",
+  "javascript"
+);
+@@clientName(BlobContentMd5ResponseHeader.blobContentMd5,
+  "blobContentMD5",
+  "javascript"
+);
+@@clientName(SourceContentMd5Parameter.sourceContentMd5,
+  "sourceContentMD5",
+  "javascript"
+);
+@@clientName(ContentMd5ResponseHeader.contentMd5, "contentMD5", "javascript");
+
 @@alternateType(BlobProperties.contentLength, uint64, "rust");
 @@alternateType(BlobContentLengthRequired.size, uint64, "rust");
 @@alternateType(ContentLengthResponseHeader.contentLength, uint64, "rust");
@@ -221,15 +253,15 @@ interface PageBlobClient extends Storage.Blob.PageBlob {}
 @@scope(Storage.Blob.Container.submitBatch, "!rust");
 @@scope(Storage.Blob.Service.submitBatch, "!rust");
 
-
 // GO SPECIFICATION
 /** The algorithm used to produce the encryption key hash. Currently, the only accepted value is \"AES256\". Must be provided if the x-ms-encryption-key header is provided. */
 #suppress "@azure-tools/typespec-azure-core/no-enum" "Existing API"
 enum EncryptionAlgorithmTypeGo {
   /** The AES256 encryption algorithm. */
   AES256: "AES256",
+
   /** Deprecated */
-  None: "None"
+  None: "None",
 }
 /** The list blob includes parameter values. */
 #suppress "@azure-tools/typespec-azure-core/no-enum" "Existing API"
@@ -282,12 +314,26 @@ enum ImmutabilityPolicySetting {
 @@alternateType(BlobItem.metadata, Record<string>, "go");
 @@alternateType(BlobItem.objectReplicationMetadata, Record<string>, "go");
 @@alternateType(BlobPrefix.name, string, "go");
+@@alternateType(Block.name, string, "go");
 @@alternateType(BlockIdParameter.blockid, string, "go");
 @@alternateType(BlockLookupList.latest, string[], "go");
-@@alternateType(EncryptionAlgorithmParameter.encryptionAlgorithm, EncryptionAlgorithmTypeGo, "go");
-@@alternateType(ImmutabilityPolicyModeParameter.immutabilityPolicyMode, ImmutabilityPolicySetting, "go");
-@@alternateType(SourceEncryptionAlgorithmParameter.sourceEncryptionAlgorithm, EncryptionAlgorithmTypeGo, "go");
-@@alternateType(ListBlobsIncludeParameter.include, ListBlobsIncludeItemGo[], "go");
+@@alternateType(EncryptionAlgorithmParameter.encryptionAlgorithm,
+  EncryptionAlgorithmTypeGo,
+  "go"
+);
+@@alternateType(ExpiryTimeParameter.expiryTime, string, "go");
+@@alternateType(ImmutabilityPolicyModeParameter.immutabilityPolicyMode,
+  ImmutabilityPolicySetting,
+  "go"
+);
+@@alternateType(SourceEncryptionAlgorithmParameter.sourceEncryptionAlgorithm,
+  EncryptionAlgorithmTypeGo,
+  "go"
+);
+@@alternateType(ListBlobsIncludeParameter.include,
+  ListBlobsIncludeItemGo[],
+  "go"
+);
 @@alternateType(UserDelegationKey.signedExpiry, utcDateTime, "go");
 @@alternateType(UserDelegationKey.signedStart, utcDateTime, "go");
 @@alternateType(UserDelegationKey.value, string, "go");
@@ -298,20 +344,39 @@ enum ImmutabilityPolicySetting {
 @@clientName(BlobItem.objectReplicationMetadata, "OrMetadata", "go");
 @@clientName(BlobServiceProperties, "StorageServiceProperties", "go");
 @@clientName(BlobServiceProperties.cors, "CORS", "go");
+@@clientName(CopyStatus, "CopyStatusType", "go");
 @@clientName(CorsRule, "CORSRule", "go");
 @@clientName(Error, "StorageError", "go");
 @@clientName(EncryptionAlgorithmTypeGo, "EncryptionAlgorithmType", "go");
 @@clientName(GeoReplicationStatusType, "BlobGeoReplicationStatus", "go");
+@@clientName(ImmutabilityPolicyExpiresOnResponseHeader.immutabilityPolicyUntilDate,
+  "ImmutabilityPolicyExpiry",
+  "go"
+);
+@@clientName(ImmutabilityPolicyExpiresOnResponseHeaderPrivate.immutabilityPolicyUntilDate,
+  "ImmutabilityPolicyExpiry",
+  "go"
+);
 @@clientName(ListBlobsIncludeItemGo, "ListBlobsIncludeItem", "go");
 @@clientName(ListBlobsResponse, "ListBlobsFlatSegmentResponse", "go");
+@@clientName(Metrics.includeApis, "IncludeAPIs", "go");
 @@clientName(QueryType, "QueryFormatType", "go");
 @@clientName(Storage.Blob.Blob.setProperties, "SetHTTPHeaders", "go");
 @@clientName(Storage.Blob.Container.findBlobsByTags, "FilterBlobs", "go");
 @@clientName(Storage.Blob.Container.listBlobs, "ListBlobFlatSegment", "go");
-@@clientName(Storage.Blob.Service.listContainers, "ListContainersSegment", "go");
-@@clientName(Storage.Blob.PageBlob.setSequenceNumber, "UpdateSequenceNumber", "go");
+@@clientName(Storage.Blob.Service.listContainers,
+  "ListContainersSegment",
+  "go"
+);
+@@clientName(Storage.Blob.PageBlob.setSequenceNumber,
+  "UpdateSequenceNumber",
+  "go"
+);
 @@clientName(Storage.Blob.Service.findBlobsByTags, "FilterBlobs", "go");
-@@clientName(UserDelegationKey.signedDelegatedUserTid, "SignedDelegatedUserTID", "go");
+@@clientName(UserDelegationKey.signedDelegatedUserTid,
+  "SignedDelegatedUserTID",
+  "go"
+);
 @@clientName(UserDelegationKey.signedOid, "SignedOID", "go");
 @@clientName(UserDelegationKey.signedTid, "SignedTID", "go");
 
@@ -348,7 +413,15 @@ enum ImmutabilityPolicySetting {
   "python"
 );
 
-//@@clientOption(Storage.Blob, "includeRootSlash", false, "python,javascript");
+@@clientOption(Storage.Blob, "includeRootSlash", false, "python,javascript");
+
+@@clientOption(Error, "header", "x-ms-error-code:errorCode", "javascript");
+@@clientOption(Error, "restErrorCodeHeader", "x-ms-error-code", "javascript");
+@@clientOption(MetadataHeaders.metadata,
+  "headerCollectionPrefix",
+  "x-ms-meta",
+  "javascript"
+);
 
 @@scope(Storage.Blob.Service.getUserDelegationKey, "!rust");
 @@scope(Storage.Blob.Container.listBlobHierarchySegment, "!rust");
@@ -363,4 +436,148 @@ enum ImmutabilityPolicySetting {
 @@scope(Storage.Blob.PageBlob.getPageRangesDiff, "!rust");
 
 @@clientName(Storage.Blob.ContainerProperties.eTag, "etag", "python");
-@@clientName(Storage.Blob.ContainerItem.delete, "deleted", "python");
+
+@@alternateType(Storage.Blob.UserDelegationKey.signedStart, string, "python");
+@@alternateType(Storage.Blob.UserDelegationKey.signedExpiry, string, "python");
+@@alternateType(Storage.Blob.UserDelegationKey.value, string, "python");
+@@alternateType(Storage.Blob.Block.name, string, "python");
+
+/** Defining an override for backward compatibility for existing sdks since the expiry
+ * parameter was originally defined as optional in the swagger
+ **/
+#suppress "@azure-tools/typespec-azure-core/use-standard-operations" "Existing API"
+#suppress "@azure-tools/typespec-azure-core/no-response-body" "Existing API"
+#suppress "@azure-tools/typespec-azure-core/use-standard-names" "Existing API"
+@put
+@route("?comp=immutabilityPolicies")
+op setImmutabilityPolicyOptionalExpiry is StorageOperationNoBody<
+  {
+    ...TimeoutParameter;
+    ...IfUnmodifiedSinceParameter;
+    ...ImmutabilityPolicyExpiryParameter;
+    ...ImmutabilityPolicyModeParameter;
+    ...SnapshotParameter;
+    ...VersionIdParameter;
+  },
+  {
+    ...ImmutabilityPolicyExpiresOnResponseHeaderPrivate;
+    ...ImmutabilityPolicyModeResponseHeaderPrivate;
+  }
+>;
+
+@@override(Storage.Blob.Blob.setImmutabilityPolicy,
+  setImmutabilityPolicyOptionalExpiry,
+  "python,csharp,javascript"
+);
+
+// C# customizations
+@@alternateType(AccessPolicy.start, utcDateTime, "csharp");
+@@alternateType(AccessPolicy.expiry, utcDateTime, "csharp");
+@@alternateType(LeaseBreakPeriodParameter.breakPeriod, int64, "csharp");
+@@alternateType(LeaseDurationHeaderParameter.duration, int64, "csharp");
+@@alternateType(BlobItem.metadata, Record<string>, "csharp");
+@@alternateType(BlobItem.objectReplicationMetadata, Record<string>, "csharp");
+@@alternateType(KeyInfo.delegatedUserTid, string, "csharp");
+
+@@clientName(GeoReplicationStatusType, "BlobGeoReplicationStatus", "csharp");
+@@clientName(StorageErrorCode, "BlobErrorCode", "csharp");
+@@clientName(Blob, "BlobRestClient", "csharp");
+@@clientName(BlobItem, "BlobItemInternal", "csharp");
+@@clientName(Container, "ContainerRestClient", "csharp");
+@@clientName(Container.listBlobs, "ListBlobFlatSegment", "csharp");
+@@clientName(Service, "ServiceRestClient", "csharp");
+@@clientName(BlockBlob, "BlockBlobRestClient", "csharp");
+@@clientName(PageBlob, "PageBlobRestClient", "csharp");
+@@clientName(AppendBlob, "AppendBlobRestClient", "csharp");
+@@clientName(BlobProperties, "BlobPropertiesInternal", "csharp");
+@@clientName(ImmutabilityPolicyMode, "BlobImmutabilityPolicyMode", "csharp");
+@@clientName(SignedIdentifiers, "BlobSignedIdentifiers", "csharp");
+@@clientName(LeaseDuration, "LeaseDurationType", "csharp");
+@@clientName(BlobItem.objectReplicationMetadata, "OrMetadata", "csharp");
+@@clientName(Blob.setProperties, "SetHttpHeaders", "csharp");
+@@clientName(ListBlobsResponse, "ListBlobsFlatSegmentResponse", "csharp");
+@@clientName(Container.findBlobsByTags, "FilterBlobs", "csharp");
+@@clientName(Service.findBlobsByTags, "FilterBlobs", "csharp");
+@@clientName(Service.listContainers, "ListContainersSegment", "csharp");
+@@clientName(QueryType, "QueryFormatType", "csharp");
+@@clientName(QueryType.JSON, "Json", "csharp");
+
+@@access(BlobProperties, Access.internal, "csharp");
+@@access(BlobItem, Access.internal, "csharp");
+
+@@clientOption(MetadataHeaders.metadata,
+  "collectionHeaderPrefix",
+  "x-ms-meta-",
+  "csharp"
+);
+
+#suppress "@azure-tools/typespec-azure-core/no-legacy-usage" "Disabling pageable in favor of custom pageable implementation in client"
+@@Azure.ClientGenerator.Core.Legacy.disablePageable(Storage.Blob.Container.listBlobs,
+  "csharp"
+);
+#suppress "@azure-tools/typespec-azure-core/no-legacy-usage" "Disabling pageable in favor of custom pageable implementation in client"
+@@Azure.ClientGenerator.Core.Legacy.disablePageable(Storage.Blob.Container.listBlobHierarchySegment,
+  "csharp"
+);
+#suppress "@azure-tools/typespec-azure-core/no-legacy-usage" "Disabling pageable in favor of custom pageable implementation in client"
+@@Azure.ClientGenerator.Core.Legacy.disablePageable(Storage.Blob.Service.listContainers,
+  "csharp"
+);
+/** ----- This section overrides the setMetadata operations for Rust to require the metadata headers ----- */
+alias MetadataHeadersRequired = {
+  /** The metadata headers. */
+  @alternateType(Record<string>, "rust")
+  @header("x-ms-meta")
+  metadata: string;
+};
+
+/** operation sets one or more user-defined name-value pairs for the specified container. */
+@sharedRoute
+@route("?restype=container&comp=metadata")
+op setMetadataRequiredMetadataContainer is StorageOperationNoBody<
+  {
+    ...TimeoutParameter;
+    ...LeaseIdOptionalParameter;
+    ...MetadataHeadersRequired;
+    ...IfModifiedSinceParameter;
+  },
+  {
+    ...EtagResponseHeaderPrivate;
+    ...LastModifiedResponseHeaderPrivate;
+  }
+>;
+
+@@override(Container.setMetadata, setMetadataRequiredMetadataContainer, "rust");
+
+/** The Set Metadata operation sets user-defined metadata for the specified blob as one or more name-value pairs. */
+#suppress "@azure-tools/typespec-azure-core/use-standard-operations" "Existing API"
+#suppress "@azure-tools/typespec-azure-core/no-response-body" "Existing API"
+#suppress "@azure-tools/typespec-azure-core/use-standard-names" "Existing API"
+@put
+@route("?comp=metadata")
+op setMetadataRequiredMetadataBlob is StorageOperationNoBody<
+  {
+    ...TimeoutParameter;
+    ...MetadataHeadersRequired;
+    ...LeaseIdOptionalParameter;
+    ...EncryptionKeyParameter;
+    ...EncryptionKeySha256Parameter;
+    ...EncryptionAlgorithmParameter;
+    ...EncryptionScopeParameter;
+    ...IfModifiedSinceParameter;
+    ...IfUnmodifiedSinceParameter;
+    ...IfNoneMatchParameter;
+    ...IfMatchParameter;
+    ...IfTagsParameter;
+  },
+  {
+    ...EtagResponseHeaderPrivate;
+    ...LastModifiedResponseHeaderPrivate;
+    ...VersionIdResponseHeaderPrivate;
+    ...RequestServerEncryptedResponseHeaderPrivate;
+    ...EncryptionKeySha256ResponseHeaderPrivate;
+    ...EncryptionScopeResponseHeaderPrivate;
+  }
+>;
+
+@@override(Blob.setMetadata, setMetadataRequiredMetadataBlob, "rust");

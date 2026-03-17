@@ -205,7 +205,7 @@ const azkeys = pkgRoot + 'test/tsp/KeyVault.Keys/client.tsp';
 generate('azkeys', azkeys, 'test/local/azkeys', ['single-client=true', 'omit-constructors=true']);
 
 const azblob = pkgRoot + 'test/tsp/Microsoft.BlobStorage/client.tsp';
-generate('azblob', azblob, 'test/local/azblob', ['generate-fakes=false', 'omit-constructors=true', 'inject-spans=false']);
+generate('azblob', azblob, 'test/local/azblob/generated', ['generate-fakes=false', 'omit-constructors=true', 'inject-spans=false', 'containing-module=github.com/Azure/azure-sdk-for-go/sdk/storage/azblob', 'go-generate=build.go']);
 
 const armtest = pkgRoot + 'test/tsp/Test.Management';
 generate('armtest/v2', armtest, 'test/local/armtest', [`examples-directory=${armtest}/examples`, 'generate-samples=true']);
@@ -285,7 +285,7 @@ function generate(moduleName, input, outputDir, perTestOptions) {
   const fixedOptions = [
     outputKind,
     `emitter-output-dir=${fullOutputDir}`,
-    'file-prefix=zz_',
+    //'file-prefix=zz_',
   ];
 
   // these options _can_ be changed per test

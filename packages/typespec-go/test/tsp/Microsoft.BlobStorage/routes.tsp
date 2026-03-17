@@ -201,7 +201,7 @@ interface Service {
     /** Required. The value of this header must be multipart/mixed with a batch boundary. Example header value: multipart/mixed; boundary=batch_<GUID> */
     @header("Content-Type")
     @alternateType(string, "javascript")
-    multipartContentType: "multipart/mixed",
+    contentType: "multipart/mixed",
 
     ...ApiVersionHeader,
     ...TimeoutParameter,
@@ -211,6 +211,8 @@ interface Service {
     /** The batch request content */
     ...MultipartBodyParameter,
   ): (MultipartBodyParameter & {
+    @statusCode statusCode: 202;
+
     /** The media type of the body of the response. For batch requests, this is multipart/mixed; boundary=batchresponse_GUID */
     #suppress "@typespec/http/content-type-ignored" "Template for existing API"
     @header("Content-Type")
@@ -253,7 +255,7 @@ interface Container {
     {
       ...TimeoutParameter;
       ...MetadataHeaders;
-      ...BlobPublicAccess;
+      ...BlobPublicAccessParameter;
 
       /** Optional.  Version 2019-07-07 and later.  Specifies the default encryption scope to set on the container and use for all future writes. */
       @header("x-ms-default-encryption-scope")
@@ -285,7 +287,7 @@ interface Container {
       ...LeaseDurationResponseHeader;
       ...LeaseStateResponseHeader;
       ...LeaseStatusResponseHeader;
-      ...BlobPublicAccess;
+      ...BlobPublicAccessResponseHeader;
 
       /** Indicates whether the container has an immutability policy set on it. */
       @header("x-ms-has-immutability-policy")
@@ -356,7 +358,7 @@ interface Container {
       /** Signed identifiers */
       @body body: SignedIdentifiers;
 
-      ...BlobPublicAccess;
+      ...BlobPublicAccessResponseHeader;
       ...EtagResponseHeader;
       ...LastModifiedResponseHeader;
     }
@@ -377,7 +379,7 @@ interface Container {
 
       ...TimeoutParameter;
       ...LeaseIdOptionalParameter;
-      ...BlobPublicAccess;
+      ...BlobPublicAccessParameter;
       ...IfModifiedSinceParameter;
       ...IfUnmodifiedSinceParameter;
     },
@@ -440,7 +442,7 @@ interface Container {
     /** Required. The value of this header must be multipart/mixed with a batch boundary. Example header value: multipart/mixed; boundary=batch_<GUID> */
     @header("Content-Type")
     @alternateType(string, "javascript")
-    multipartContentType: "multipart/mixed",
+    contentType: "multipart/mixed",
 
     ...ApiVersionHeader,
     ...TimeoutParameter,
@@ -454,7 +456,7 @@ interface Container {
 
     /** Required. The value of this header must be multipart/mixed with a batch boundary. Example header value: multipart/mixed; boundary=batch_<GUID> */
     @header("Content-Type")
-    multipartContentType: "multipart/mixed";
+    contentType: "multipart/mixed";
 
     ...RequestIdResponseHeader;
     ...ApiVersionHeader;
@@ -676,6 +678,7 @@ interface Blob {
     ...LeaseIdOptionalParameter,
 
     /** When set to true and specified together with the Range, the service returns the MD5 hash for the range, as long as the range is less than or equal to 4 MB in size. */
+    @clientName("rangeGetContentMD5", "javascript")
     @header("x-ms-range-get-content-md5")
     rangeGetContentMd5?: boolean,
 
@@ -881,7 +884,7 @@ interface Blob {
       ...VersionIdResponseHeader;
       ...IsCurrentVersionResponseHeader;
       ...TagCountResponseHeader;
-      ...ExpiryTimeHeader;
+      ...ExpiryTimeResponseHeader;
       ...IsSealedResponseHeader;
       ...RehydratePriorityHeader;
       ...LastAccessedResponseHeader;
@@ -949,7 +952,7 @@ interface Blob {
     {
       ...TimeoutParameter;
       ...BlobExpiryOptionsParameter;
-      ...ExpiryTimeHeader;
+      ...ExpiryTimeParameter;
     },
     {
       ...EtagResponseHeader;
@@ -1281,7 +1284,6 @@ interface Blob {
   #suppress "@azure-tools/typespec-azure-core/no-response-body" "Existing API"
   @put
   @sharedRoute
-  @route("?comp=copy")
   copyFromUrl is StorageOperationNoBody<
     {
       ...TimeoutParameter;
